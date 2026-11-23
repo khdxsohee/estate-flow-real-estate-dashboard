@@ -5,6 +5,8 @@ EstateFlow is a responsive real estate business dashboard designed to help teams
 
 The dashboard includes interactive charts, searchable tables, date-range controls, and a dark-mode option. It currently uses sample data and runs as a front-end demo.
 
+<img width="1366" height="1253" alt="screencapture-file-C-Users-Wang-Lin-s-Heart-Downloads-file-html-2026-11-24-02_08_33" src="https://github.com/user-attachments/assets/3dfb356a-7f30-4585-9898-0a154a7ad8fe" />
+
 ## Features
 
 - **Overview dashboard** with revenue, listings, leads, and conversion metrics
