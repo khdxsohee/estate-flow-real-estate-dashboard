@@ -1,17 +1,19 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>EstateFlow — Real Estate Dashboard</title>
+
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Manrope:wght@500;600;700;800&display=swap" rel="stylesheet">
+
   <style>
     :root {
       --bg: #f5f7fb;
-      --surface: #fff;
+      --surface: #ffffff;
       --surface-2: #f8f9fc;
       --text: #1c2434;
       --muted: #8790a3;
@@ -20,8 +22,8 @@
       --primary-soft: #eef0ff;
       --green: #17a879;
       --red: #e16a6a;
-      --shadow: 0 8px 28px rgba(28, 36, 52, .045);
       --sidebar: #171d31;
+      --shadow: 0 8px 28px rgba(28,36,52,.045);
     }
 
     body.dark {
@@ -46,6 +48,7 @@
     button, input, select { font: inherit; }
     button { cursor: pointer; }
     .app { display: flex; min-height: 100vh; }
+
     .sidebar {
       width: 248px;
       background: var(--sidebar);
@@ -56,81 +59,204 @@
       flex-shrink: 0;
     }
     .brand {
-      display: flex; align-items: center; gap: 11px;
-      color: white; font: 800 19px Manrope, sans-serif;
+      display: flex;
+      align-items: center;
+      gap: 11px;
+      color: white;
+      font: 800 19px Manrope, sans-serif;
       padding: 0 12px 34px;
     }
     .brand-mark {
-      width: 34px; height: 34px; border-radius: 11px;
+      width: 34px;
+      height: 34px;
+      border-radius: 11px;
       background: linear-gradient(135deg, #7785ff, #4d5bf0);
-      display: grid; place-items: center; font-size: 18px;
+      display: grid;
+      place-items: center;
+      font-size: 18px;
     }
     .nav-label {
-      color: #778198; font-size: 10px; font-weight: 700;
-      letter-spacing: 1.4px; padding: 0 13px; margin: 10px 0 11px;
+      color: #778198;
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 1.4px;
+      padding: 0 13px;
+      margin: 10px 0 11px;
     }
     .nav-item {
-      color: #aeb6c9; text-decoration: none; border: 0;
-      background: transparent; padding: 12px 13px; border-radius: 9px;
-      display: flex; align-items: center; gap: 13px;
-      width: 100%; text-align: left; margin: 2px 0;
+      color: #aeb6c9;
+      text-decoration: none;
+      border: 0;
+      background: transparent;
+      padding: 12px 13px;
+      border-radius: 9px;
+      display: flex;
+      align-items: center;
+      gap: 13px;
+      width: 100%;
+      text-align: left;
+      margin: 2px 0;
       transition: .2s;
     }
-    .nav-item:hover, .nav-item.active { color: white; background: #2b3350; }
+    .nav-item:hover, .nav-item.active {
+      color: white;
+      background: #2b3350;
+    }
     .nav-icon { width: 19px; text-align: center; font-size: 16px; }
-    .nav-badge { margin-left: auto; background: #5365f2; color: #fff; border-radius: 20px; padding: 2px 7px; font-size: 10px; }
+    .nav-badge {
+      margin-left: auto;
+      background: #5365f2;
+      color: white;
+      border-radius: 20px;
+      padding: 2px 7px;
+      font-size: 10px;
+    }
     .sidebar-bottom { margin-top: auto; }
     .help-card {
-      margin: 25px 5px 5px; padding: 16px; border-radius: 12px;
+      margin: 25px 5px 5px;
+      padding: 16px;
+      border-radius: 12px;
       background: linear-gradient(140deg, #293454, #222a43);
     }
     .help-card strong { color: white; display: block; margin: 8px 0 5px; }
-    .help-card p { margin: 0 0 13px; font-size: 11px; color: #aab3c8; line-height: 1.5; }
-    .help-card button { border: 0; border-radius: 7px; background: #596af4; color: white; padding: 8px 12px; font-size: 11px; }
+    .help-card p {
+      margin: 0 0 13px;
+      font-size: 11px;
+      color: #aab3c8;
+      line-height: 1.5;
+    }
+    .help-card button {
+      border: 0;
+      border-radius: 7px;
+      background: #596af4;
+      color: white;
+      padding: 8px 12px;
+      font-size: 11px;
+    }
 
     .main { min-width: 0; flex: 1; }
     .topbar {
-      height: 76px; padding: 0 34px; background: var(--surface);
-      border-bottom: 1px solid var(--line); display: flex;
-      align-items: center; justify-content: space-between;
+      height: 76px;
+      padding: 0 34px;
+      background: var(--surface);
+      border-bottom: 1px solid var(--line);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
     }
     .crumb { color: var(--muted); font-size: 12px; }
     .crumb strong { color: var(--text); font-weight: 600; }
     .top-actions { display: flex; align-items: center; gap: 14px; }
     .icon-btn {
-      width: 38px; height: 38px; border: 1px solid var(--line);
-      background: var(--surface); color: var(--text); border-radius: 10px;
+      width: 38px;
+      height: 38px;
+      border: 1px solid var(--line);
+      background: var(--surface);
+      color: var(--text);
+      border-radius: 10px;
       position: relative;
     }
-    .dot { width: 7px; height: 7px; background: #f06a75; border-radius: 50%; position: absolute; top: 8px; right: 8px; }
+    .dot {
+      width: 7px;
+      height: 7px;
+      background: #f06a75;
+      border-radius: 50%;
+      position: absolute;
+      top: 8px;
+      right: 8px;
+    }
     .profile { display: flex; align-items: center; gap: 10px; padding-left: 8px; }
-    .avatar { width: 37px; height: 37px; border-radius: 50%; display: grid; place-items: center; color: white; font-weight: 700; background: linear-gradient(135deg,#eea88f,#975dca); }
+    .avatar {
+      width: 37px;
+      height: 37px;
+      border-radius: 50%;
+      display: grid;
+      place-items: center;
+      color: white;
+      font-weight: 700;
+      background: linear-gradient(135deg,#eea88f,#975dca);
+    }
     .profile strong { display: block; font-size: 12px; }
     .profile small { color: var(--muted); font-size: 10px; }
+
     .content { max-width: 1600px; margin: auto; padding: 30px 34px 45px; }
-    .welcome { display: flex; align-items: end; justify-content: space-between; margin-bottom: 23px; }
-    h1 { font: 800 25px Manrope, sans-serif; margin: 0 0 6px; letter-spacing: -.7px; }
+    .welcome {
+      display: flex;
+      align-items: end;
+      justify-content: space-between;
+      margin-bottom: 23px;
+    }
+    h1 {
+      font: 800 25px Manrope, sans-serif;
+      margin: 0 0 6px;
+      letter-spacing: -.7px;
+    }
     .subtext { color: var(--muted); font-size: 12px; }
     .welcome-actions { display: flex; gap: 10px; }
     .select, .btn {
-      height: 39px; border: 1px solid var(--line); background: var(--surface);
-      color: var(--text); border-radius: 8px; padding: 0 12px; outline: none;
+      height: 39px;
+      border: 1px solid var(--line);
+      background: var(--surface);
+      color: var(--text);
+      border-radius: 8px;
+      padding: 0 12px;
+      outline: none;
     }
-    .btn-primary { background: var(--primary); color: white; border-color: var(--primary); padding: 0 15px; font-weight: 600; }
-    .btn:hover { filter: brightness(.97); }
-    .stats { display: grid; grid-template-columns: repeat(4,1fr); gap: 16px; margin-bottom: 17px; }
-    .card { background: var(--surface); border: 1px solid var(--line); border-radius: 13px; box-shadow: var(--shadow); }
+    .btn-primary {
+      background: var(--primary);
+      color: white;
+      border-color: var(--primary);
+      padding: 0 15px;
+      font-weight: 600;
+    }
+
+    .stats {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 16px;
+      margin-bottom: 17px;
+    }
+    .card {
+      background: var(--surface);
+      border: 1px solid var(--line);
+      border-radius: 13px;
+      box-shadow: var(--shadow);
+    }
     .stat { padding: 19px 20px; }
     .stat-top { display: flex; justify-content: space-between; align-items: center; }
     .stat-title { color: var(--muted); font-size: 12px; }
-    .stat-icon { width: 35px; height: 35px; display: grid; place-items: center; border-radius: 10px; color: var(--primary); background: var(--primary-soft); }
-    .stat-value { font: 800 25px Manrope, sans-serif; margin: 13px 0 8px; letter-spacing: -.7px; }
+    .stat-icon {
+      width: 35px;
+      height: 35px;
+      display: grid;
+      place-items: center;
+      border-radius: 10px;
+      color: var(--primary);
+      background: var(--primary-soft);
+    }
+    .stat-value {
+      font: 800 25px Manrope, sans-serif;
+      margin: 13px 0 8px;
+      letter-spacing: -.7px;
+    }
     .stat-foot { color: var(--muted); font-size: 11px; }
     .up { color: var(--green); font-weight: 700; margin-right: 4px; }
     .down { color: var(--red); font-weight: 700; margin-right: 4px; }
-    .grid-main { display: grid; grid-template-columns: minmax(0, 1.65fr) minmax(280px, .9fr); gap: 17px; margin-bottom: 17px; }
+
+    .grid-main, .bottom-grid {
+      display: grid;
+      grid-template-columns: minmax(0, 1.65fr) minmax(280px, .9fr);
+      gap: 17px;
+      margin-bottom: 17px;
+    }
     .panel { padding: 20px; }
-    .panel-head { display: flex; justify-content: space-between; align-items: center; margin-bottom: 18px; }
+    .panel-head {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 18px;
+    }
     .panel-title { font: 700 14px Manrope, sans-serif; }
     .panel-note { color: var(--muted); font-size: 11px; margin-top: 4px; }
     .legend { display: flex; gap: 15px; color: var(--muted); font-size: 10px; }
@@ -138,26 +264,80 @@
     .key { width: 7px; height: 7px; border-radius: 50%; background: var(--primary); }
     .key.orange { background: #f1a86b; }
     .chart-wrap { height: 255px; position: relative; }
-    .source-row { display: flex; align-items: center; justify-content: space-between; padding: 13px 0; border-bottom: 1px solid var(--line); }
+    .source-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 13px 0;
+      border-bottom: 1px solid var(--line);
+    }
     .source-row:last-child { border: 0; }
     .source-left { display: flex; align-items: center; gap: 10px; }
-    .source-icon { width: 32px; height: 32px; display: grid; place-items: center; border-radius: 9px; background: var(--surface-2); }
+    .source-icon {
+      width: 32px;
+      height: 32px;
+      display: grid;
+      place-items: center;
+      border-radius: 9px;
+      background: var(--surface-2);
+    }
     .source-name { font-size: 11px; font-weight: 600; }
     .source-count { color: var(--muted); font-size: 10px; margin-top: 3px; }
     .source-percent { font-weight: 700; font-size: 11px; }
-    .source-bar { width: 78px; height: 5px; background: var(--line); border-radius: 4px; margin-top: 5px; overflow: hidden; }
-    .source-bar i { display: block; height: 100%; border-radius: 4px; background: var(--primary); }
-    .bottom-grid { display: grid; grid-template-columns: minmax(0,1.65fr) minmax(280px,.9fr); gap: 17px; }
+    .source-bar {
+      width: 78px;
+      height: 5px;
+      background: var(--line);
+      border-radius: 4px;
+      margin-top: 5px;
+      overflow: hidden;
+    }
+    .source-bar i {
+      display: block;
+      height: 100%;
+      border-radius: 4px;
+      background: var(--primary);
+    }
+
     .table-tools { display: flex; gap: 8px; align-items: center; }
-    .search { width: 170px; height: 34px; border: 1px solid var(--line); border-radius: 7px; background: var(--surface); color: var(--text); padding: 0 10px; outline: none; font-size: 11px; }
+    .search {
+      width: 190px;
+      height: 34px;
+      border: 1px solid var(--line);
+      border-radius: 7px;
+      background: var(--surface);
+      color: var(--text);
+      padding: 0 10px;
+      outline: none;
+      font-size: 11px;
+    }
     .small-select { height: 34px; font-size: 11px; }
     .table-scroll { overflow-x: auto; }
-    table { border-collapse: collapse; width: 100%; min-width: 590px; text-align: left; }
-    th { color: var(--muted); font-size: 10px; font-weight: 500; padding: 10px 8px; border-bottom: 1px solid var(--line); }
-    td { padding: 12px 8px; border-bottom: 1px solid var(--line); font-size: 11px; white-space: nowrap; }
+    table { border-collapse: collapse; width: 100%; min-width: 580px; text-align: left; }
+    th {
+      color: var(--muted);
+      font-size: 10px;
+      font-weight: 500;
+      padding: 10px 8px;
+      border-bottom: 1px solid var(--line);
+    }
+    td {
+      padding: 12px 8px;
+      border-bottom: 1px solid var(--line);
+      font-size: 11px;
+      white-space: nowrap;
+    }
     tbody tr:last-child td { border-bottom: 0; }
     .property { display: flex; align-items: center; gap: 9px; }
-    .property-img { width: 39px; height: 34px; border-radius: 6px; display: grid; place-items: center; font-size: 17px; background: linear-gradient(135deg,#dae5f6,#b8c8e4); }
+    .property-img {
+      width: 39px;
+      height: 34px;
+      border-radius: 6px;
+      display: grid;
+      place-items: center;
+      font-size: 17px;
+      background: linear-gradient(135deg,#dae5f6,#b8c8e4);
+    }
     .property strong { display: block; font-size: 11px; }
     .property small { display: block; color: var(--muted); font-size: 9px; margin-top: 3px; }
     .status { border-radius: 20px; padding: 5px 8px; font-size: 9px; font-weight: 600; }
@@ -167,27 +347,57 @@
     body.dark .sold { background: #193b34; color: #6dd3b2; }
     body.dark .pending { background: #3b3020; color: #f3bd68; }
     body.dark .listed { background: #292e57; color: #a9b2ff; }
+
     .activity-item { display: flex; gap: 11px; padding: 12px 0; border-bottom: 1px solid var(--line); }
     .activity-item:last-child { border: 0; }
-    .activity-dot { width: 31px; height: 31px; border-radius: 50%; display: grid; place-items: center; background: var(--primary-soft); color: var(--primary); flex-shrink: 0; }
+    .activity-dot {
+      width: 31px;
+      height: 31px;
+      border-radius: 50%;
+      display: grid;
+      place-items: center;
+      background: var(--primary-soft);
+      color: var(--primary);
+      flex-shrink: 0;
+    }
     .activity-copy { font-size: 11px; line-height: 1.55; }
     .activity-copy strong { font-weight: 700; }
     .activity-copy small { display: block; color: var(--muted); font-size: 9px; margin-top: 3px; }
     .view-all { color: var(--primary); background: none; border: 0; font-size: 11px; }
+
     .toast {
-      position: fixed; right: 20px; bottom: 20px; background: #20283a; color: white;
-      border-radius: 9px; padding: 12px 17px; box-shadow: var(--shadow);
-      opacity: 0; transform: translateY(10px); transition: .25s; pointer-events: none;
+      position: fixed;
+      right: 20px;
+      bottom: 20px;
+      background: #20283a;
+      color: white;
+      border-radius: 9px;
+      padding: 12px 17px;
+      box-shadow: var(--shadow);
+      opacity: 0;
+      transform: translateY(10px);
+      transition: .25s;
+      pointer-events: none;
+      z-index: 20;
     }
     .toast.show { opacity: 1; transform: translateY(0); }
     .mobile-menu { display: none; }
+
     @media (max-width: 1100px) {
       .sidebar { width: 215px; }
       .content { padding: 25px 22px 35px; }
-      .stats { grid-template-columns: repeat(2,1fr); }
+      .stats { grid-template-columns: repeat(2, 1fr); }
     }
     @media (max-width: 800px) {
-      .sidebar { position: fixed; z-index: 10; left: -260px; top: 0; bottom: 0; transition: .25s; width: 248px; }
+      .sidebar {
+        position: fixed;
+        z-index: 10;
+        left: -260px;
+        top: 0;
+        bottom: 0;
+        transition: .25s;
+        width: 248px;
+      }
       .sidebar.open { left: 0; }
       .mobile-menu { display: inline-grid; }
       .topbar { padding: 0 17px; }
@@ -203,29 +413,35 @@
       .welcome-actions { width: 100%; }
       .welcome-actions .select, .welcome-actions .btn { flex: 1; }
       .table-tools { flex-wrap: wrap; }
-      .search { flex: 1; }
+      .search { flex: 1; width: 100%; }
+      .panel-head { align-items: flex-start; flex-direction: column; }
     }
   </style>
 </head>
+
 <body>
 <div class="app">
   <aside class="sidebar" id="sidebar">
     <div class="brand"><span class="brand-mark">⌂</span> EstateFlow</div>
+
     <div class="nav-label">WORKSPACE</div>
     <button class="nav-item active" data-page="Overview"><span class="nav-icon">▦</span> Overview</button>
     <button class="nav-item" data-page="Properties"><span class="nav-icon">⌂</span> Properties <span class="nav-badge">24</span></button>
     <button class="nav-item" data-page="Leads"><span class="nav-icon">♙</span> Leads</button>
     <button class="nav-item" data-page="Transactions"><span class="nav-icon">↗</span> Transactions</button>
     <button class="nav-item" data-page="Calendar"><span class="nav-icon">▣</span> Calendar</button>
+
     <div class="nav-label" style="margin-top:27px">MANAGEMENT</div>
     <button class="nav-item" data-page="Agents"><span class="nav-icon">♧</span> Agents</button>
     <button class="nav-item" data-page="Reports"><span class="nav-icon">▤</span> Reports</button>
     <button class="nav-item" data-page="Settings"><span class="nav-icon">⚙</span> Settings</button>
+
     <div class="sidebar-bottom">
       <div class="help-card">
-        <span>💡</span><strong>Need a hand?</strong>
+        <span>💡</span>
+        <strong>Need a hand?</strong>
         <p>Visit our help center for tips to grow your business.</p>
-        <button onclick="notify('Help center coming soon')">Open Help Center</button>
+        <button id="helpButton">Open Help Center</button>
       </div>
       <button class="nav-item" data-page="Log out"><span class="nav-icon">↪</span> Log out</button>
     </div>
@@ -240,13 +456,20 @@
       <div class="top-actions">
         <button class="icon-btn" id="themeBtn" title="Toggle dark mode">◐</button>
         <button class="icon-btn" id="bellBtn" title="Notifications">♧<span class="dot"></span></button>
-        <div class="profile"><div class="avatar">JD</div><div class="profile-text"><strong>James Davidson</strong><small>Managing Director</small></div><span style="color:var(--muted)">⌄</span></div>
+        <div class="profile">
+          <div class="avatar">JD</div>
+          <div class="profile-text"><strong>James Davidson</strong><small>Managing Director</small></div>
+          <span style="color:var(--muted)">⌄</span>
+        </div>
       </div>
     </header>
 
-    <div class="content">
+    <div class="content" id="dashboardContent">
       <section class="welcome">
-        <div><h1>Good morning, James 👋</h1><div class="subtext">Here's what's happening with your real estate business today.</div></div>
+        <div>
+          <h1>Good morning, James 👋</h1>
+          <div class="subtext">Here's what's happening with your real estate business today.</div>
+        </div>
         <div class="welcome-actions">
           <select class="select" id="rangeSelect" aria-label="Date range">
             <option value="7">Last 7 days</option>
@@ -288,14 +511,16 @@
           </div>
           <div class="chart-wrap"><canvas id="revenueChart"></canvas></div>
         </article>
+
         <article class="card panel">
-          <div class="panel-head"><div><div class="panel-title">Lead Sources</div><div class="panel-note">Where your leads come from</div></div><button class="view-all" onclick="notify('Lead source report opened')">View report</button></div>
-          <div class="chart-wrap" style="height:145px"><canvas id="leadChart"></canvas></div>
-          <div>
-            <div class="source-row"><div class="source-left"><span class="source-icon">🔎</span><div><div class="source-name">Website</div><div class="source-count">492 leads</div></div></div><div><div class="source-percent">38%</div><div class="source-bar"><i style="width:38%"></i></div></div></div>
-            <div class="source-row"><div class="source-left"><span class="source-icon">📱</span><div><div class="source-name">Social media</div><div class="source-count">318 leads</div></div></div><div><div class="source-percent">27%</div><div class="source-bar"><i style="width:27%;background:#f1a86b"></i></div></div></div>
-            <div class="source-row"><div class="source-left"><span class="source-icon">🤝</span><div><div class="source-name">Referrals</div><div class="source-count">237 leads</div></div></div><div><div class="source-percent">20%</div><div class="source-bar"><i style="width:20%;background:#54bc9a"></i></div></div></div>
+          <div class="panel-head">
+            <div><div class="panel-title">Lead Sources</div><div class="panel-note">Where your leads come from</div></div>
+            <button class="view-all" id="leadReportButton">View report</button>
           </div>
+          <div class="chart-wrap" style="height:145px"><canvas id="leadChart"></canvas></div>
+          <div class="source-row"><div class="source-left"><span class="source-icon">🔎</span><div><div class="source-name">Website</div><div class="source-count">492 leads</div></div></div><div><div class="source-percent">38%</div><div class="source-bar"><i style="width:38%"></i></div></div></div>
+          <div class="source-row"><div class="source-left"><span class="source-icon">📱</span><div><div class="source-name">Social media</div><div class="source-count">318 leads</div></div></div><div><div class="source-percent">27%</div><div class="source-bar"><i style="width:27%;background:#f1a86b"></i></div></div></div>
+          <div class="source-row"><div class="source-left"><span class="source-icon">🤝</span><div><div class="source-name">Referrals</div><div class="source-count">237 leads</div></div></div><div><div class="source-percent">20%</div><div class="source-bar"><i style="width:20%;background:#54bc9a"></i></div></div></div>
         </article>
       </section>
 
@@ -303,7 +528,13 @@
         <article class="card panel">
           <div class="panel-head">
             <div><div class="panel-title">Recent Properties</div><div class="panel-note">Track your latest listings and deals</div></div>
-            <div class="table-tools"><input class="search" id="searchInput" placeholder="Search properties..." /><select class="select small-select" id="statusFilter"><option value="all">All statuses</option><option>Sold</option><option>Pending</option><option>Listed</option></select></div>
+            <div class="table-tools">
+              <input class="search" id="propertySearch" placeholder="Search properties...">
+              <select class="select small-select" id="statusFilter">
+                <option value="all">All statuses</option>
+                <option>Sold</option><option>Pending</option><option>Listed</option>
+              </select>
+            </div>
           </div>
           <div class="table-scroll">
             <table>
@@ -320,7 +551,10 @@
         </article>
 
         <article class="card panel">
-          <div class="panel-head"><div><div class="panel-title">Recent Activity</div><div class="panel-note">Latest updates from your team</div></div><button class="view-all" onclick="notify('Showing all activity')">View all</button></div>
+          <div class="panel-head">
+            <div><div class="panel-title">Recent Activity</div><div class="panel-note">Latest updates from your team</div></div>
+            <button class="view-all" id="activityButton">View all</button>
+          </div>
           <div class="activity-item"><span class="activity-dot">✓</span><div class="activity-copy"><strong>Olivia Chen</strong> closed a deal on Willow Creek Estate.<small>12 minutes ago · $845,000</small></div></div>
           <div class="activity-item"><span class="activity-dot">♙</span><div class="activity-copy"><strong>Marcus Lee</strong> added 8 new leads to the pipeline.<small>48 minutes ago · New leads</small></div></div>
           <div class="activity-item"><span class="activity-dot">⌂</span><div class="activity-copy"><strong>Sophia Patel</strong> published a new property listing.<small>2 hours ago · Maple Ridge Residence</small></div></div>
@@ -328,12 +562,15 @@
         </article>
       </section>
     </div>
+
+    <div class="content" id="sectionView" style="display:none"></div>
   </main>
 </div>
+
 <div class="toast" id="toast"></div>
 
 <script>
-  const $ = (selector) => document.querySelector(selector);
+  const $ = selector => document.querySelector(selector);
   let toastTimer;
 
   function notify(message) {
@@ -344,8 +581,183 @@
     toastTimer = setTimeout(() => toast.classList.remove("show"), 2600);
   }
 
-  const chartText = getComputedStyle(document.body).getPropertyValue("--muted").trim();
-  const chartGrid = getComputedStyle(document.body).getPropertyValue("--line").trim();
+  const sectionData = {
+    Properties: {
+      subtitle: "Manage listings, pricing, and property status.",
+      stats: [["Active Listings", "124"], ["Pending", "18"], ["Sold This Month", "32"]],
+      headers: ["PROPERTY", "LOCATION", "PRICE", "STATUS"],
+      rows: [
+        ["Willow Creek Estate", "Austin, TX", "$845,000", "Sold"],
+        ["Parkside Business Tower", "Denver, CO", "$1,240,000", "Pending"],
+        ["Maple Ridge Residence", "Portland, OR", "$620,000", "Listed"],
+        ["Harbor Point Retail", "Seattle, WA", "$980,000", "Sold"]
+      ],
+      button: "＋ Add Property"
+    },
+    Leads: {
+      subtitle: "Review prospective clients and follow up with new opportunities.",
+      stats: [["New Leads", "86"], ["Contacted", "42"], ["Converted", "18"]],
+      headers: ["CONTACT", "INTEREST", "SOURCE", "STATUS"],
+      rows: [
+        ["Ava Thompson", "Residential", "Website", "New"],
+        ["Noah Williams", "Commercial", "Referral", "Contacted"],
+        ["Mia Robinson", "Residential", "Social media", "New"],
+        ["Liam Garcia", "Investment", "Website", "Qualified"]
+      ],
+      button: "＋ Add Lead"
+    },
+    Transactions: {
+      subtitle: "Monitor deal progress, closing dates, and transaction values.",
+      stats: [["In Progress", "28"], ["Closed This Month", "32"], ["Total Value", "$8.4M"]],
+      headers: ["TRANSACTION", "CLIENT", "VALUE", "STATUS"],
+      rows: [
+        ["Willow Creek Estate", "Ava Thompson", "$845,000", "Closed"],
+        ["Parkside Business Tower", "Noah Williams", "$1,240,000", "In Review"],
+        ["Maple Ridge Residence", "Mia Robinson", "$620,000", "Pending"],
+        ["Harbor Point Retail", "Liam Garcia", "$980,000", "Closed"]
+      ],
+      button: "＋ New Transaction"
+    },
+    Calendar: {
+      subtitle: "Upcoming viewings, meetings, and important business dates.",
+      stats: [["Today's Events", "5"], ["This Week", "18"], ["Property Viewings", "9"]],
+      headers: ["EVENT", "DATE", "TIME", "TYPE"],
+      rows: [
+        ["Viewing — Willow Creek Estate", "Today", "10:30 AM", "Viewing"],
+        ["Client meeting — Ava Thompson", "Today", "1:00 PM", "Meeting"],
+        ["Parkside Tower inspection", "Tomorrow", "11:00 AM", "Inspection"],
+        ["Weekly team meeting", "Friday", "9:30 AM", "Team"]
+      ],
+      button: "＋ Add Event"
+    },
+    Agents: {
+      subtitle: "Track your team's workload and performance.",
+      stats: [["Team Members", "12"], ["Active Agents", "10"], ["Deals This Month", "32"]],
+      headers: ["AGENT", "ACTIVE LISTINGS", "DEALS", "LEADS"],
+      rows: [
+        ["Olivia Chen", "12", "8", "34"],
+        ["Marcus Lee", "9", "6", "28"],
+        ["Sophia Patel", "11", "5", "31"],
+        ["Ethan Brooks", "7", "4", "22"]
+      ],
+      button: "＋ Add Agent"
+    },
+    Reports: {
+      subtitle: "Explore business performance and key sales metrics.",
+      stats: [["Revenue This Month", "$248,560"], ["Average Deal", "$720,000"], ["Conversion Rate", "6.8%"]],
+      headers: ["REPORT", "PERIOD", "LAST UPDATED", "ACTION"],
+      rows: [
+        ["Revenue Overview", "This month", "Today", "View"],
+        ["Lead Conversion", "This month", "Today", "View"],
+        ["Agent Performance", "This quarter", "Yesterday", "View"],
+        ["Property Sales", "This year", "Yesterday", "View"]
+      ],
+      button: "＋ Generate Report"
+    },
+    Settings: {
+      subtitle: "Update your workspace preferences and business details.",
+      stats: [["Workspace", "EstateFlow"], ["Plan", "Business"], ["Team Members", "12"]],
+      headers: ["SETTING", "DESCRIPTION", "ACTION", "STATUS"],
+      rows: [
+        ["Business Profile", "Company name and contact details", "Edit", "Configured"],
+        ["Notifications", "Email and dashboard alerts", "Manage", "Enabled"],
+        ["Team Access", "Manage roles and permissions", "Manage", "12 members"],
+        ["Billing", "Plan and payment details", "View", "Active"]
+      ],
+      button: "Save Settings"
+    },
+    "Log out": {
+      subtitle: "You are currently signed in to the EstateFlow demo.",
+      stats: [["Account", "James Davidson"], ["Role", "Managing Director"], ["Workspace", "EstateFlow"]],
+      headers: ["ACCOUNT", "DETAILS"],
+      rows: [
+        ["Signed-in user", "James Davidson"],
+        ["Account role", "Managing Director"],
+        ["Workspace", "EstateFlow"]
+      ],
+      button: "Sign out"
+    }
+  };
+
+  function renderSection(page) {
+    const data = sectionData[page];
+    if (!data) return;
+
+    $("#dashboardContent").style.display = "none";
+    $("#sectionView").style.display = "block";
+
+    const stats = data.stats.map(([label, value]) => `
+      <article class="card stat">
+        <div class="stat-title">${label}</div>
+        <div class="stat-value">${value}</div>
+        <div class="stat-foot">Workspace overview</div>
+      </article>
+    `).join("");
+
+    const headers = data.headers.map(header => `<th>${header}</th>`).join("");
+    const rows = data.rows.map(row =>
+      `<tr>${row.map(cell => `<td>${cell}</td>`).join("")}</tr>`
+    ).join("");
+
+    $("#sectionView").innerHTML = `
+      <section class="welcome">
+        <div>
+          <h1>${page}</h1>
+          <div class="subtext">${data.subtitle}</div>
+        </div>
+        <button class="btn btn-primary" id="sectionAction">${data.button}</button>
+      </section>
+
+      <section class="stats">${stats}</section>
+
+      <article class="card panel">
+        <div class="panel-head">
+          <div>
+            <div class="panel-title">${page} Overview</div>
+            <div class="panel-note">Workspace data and recent updates</div>
+          </div>
+          <input class="search" id="sectionSearch" placeholder="Search ${page.toLowerCase()}...">
+        </div>
+        <div class="table-scroll">
+          <table>
+            <thead><tr>${headers}</tr></thead>
+            <tbody id="sectionRows">${rows}</tbody>
+          </table>
+        </div>
+      </article>
+    `;
+
+    $("#sectionAction").addEventListener("click", () => {
+      const action = data.button.replace(/[＋+]/g, "").trim();
+      notify(`${action} selected — connect a form or backend to save data.`);
+    });
+
+    $("#sectionSearch").addEventListener("input", event => {
+      const term = event.target.value.toLowerCase();
+      document.querySelectorAll("#sectionRows tr").forEach(row => {
+        row.style.display = row.textContent.toLowerCase().includes(term) ? "" : "none";
+      });
+    });
+  }
+
+  document.querySelectorAll(".nav-item[data-page]").forEach(item => {
+    item.addEventListener("click", () => {
+      document.querySelectorAll(".nav-item[data-page]").forEach(link => link.classList.remove("active"));
+      item.classList.add("active");
+
+      const page = item.dataset.page;
+      $("#crumbPage").textContent = page;
+
+      if (page === "Overview") {
+        $("#sectionView").style.display = "none";
+        $("#dashboardContent").style.display = "block";
+      } else {
+        renderSection(page);
+      }
+
+      if (window.innerWidth <= 800) $("#sidebar").classList.remove("open");
+    });
+  });
 
   const revenueChart = new Chart($("#revenueChart"), {
     type: "line",
@@ -357,26 +769,47 @@
           data: [18, 25, 21, 34, 29, 42, 38, 52, 45, 59, 53, 68],
           borderColor: "#596af4",
           backgroundColor: "rgba(89,106,244,.10)",
-          fill: true, tension: .4, borderWidth: 2.5,
-          pointRadius: 0, pointHoverRadius: 5
+          fill: true,
+          tension: .4,
+          borderWidth: 2.5,
+          pointRadius: 0,
+          pointHoverRadius: 5
         },
         {
           label: "Sales",
           data: [12, 18, 15, 23, 20, 29, 25, 36, 32, 42, 39, 49],
           borderColor: "#f1a86b",
           backgroundColor: "transparent",
-          fill: false, tension: .4, borderWidth: 2,
-          pointRadius: 0, pointHoverRadius: 5
+          fill: false,
+          tension: .4,
+          borderWidth: 2,
+          pointRadius: 0,
+          pointHoverRadius: 5
         }
       ]
     },
     options: {
-      responsive: true, maintainAspectRatio: false,
-      plugins: { legend: { display: false }, tooltip: { mode: "index", intersect: false } },
+      responsive: true,
+      maintainAspectRatio: false,
+      plugins: { legend: { display: false } },
       interaction: { mode: "index", intersect: false },
       scales: {
-        x: { grid: { display: false }, ticks: { color: chartText, font: { size: 10 } }, border: { display: false } },
-        y: { min: 0, max: 80, grid: { color: chartGrid }, ticks: { color: chartText, font: { size: 10 }, callback: value => "$" + value + "k" }, border: { display: false } }
+        x: {
+          grid: { display: false },
+          ticks: { color: "#8790a3", font: { size: 10 } },
+          border: { display: false }
+        },
+        y: {
+          min: 0,
+          max: 80,
+          grid: { color: "#edf0f5" },
+          ticks: {
+            color: "#8790a3",
+            font: { size: 10 },
+            callback: value => "$" + value + "k"
+          },
+          border: { display: false }
+        }
       }
     }
   });
@@ -385,58 +818,72 @@
     type: "doughnut",
     data: {
       labels: ["Website", "Social media", "Referrals", "Other"],
-      datasets: [{ data: [38, 27, 20, 15], backgroundColor: ["#596af4", "#f1a86b", "#54bc9a", "#d9deea"], borderWidth: 0, hoverOffset: 5 }]
+      datasets: [{
+        data: [38, 27, 20, 15],
+        backgroundColor: ["#596af4", "#f1a86b", "#54bc9a", "#d9deea"],
+        borderWidth: 0,
+        hoverOffset: 5
+      }]
     },
     options: {
-      responsive: true, maintainAspectRatio: false, cutout: "72%",
-      plugins: { legend: { display: false }, tooltip: { callbacks: { label: context => ` ${context.label}: ${context.raw}%` } } }
+      responsive: true,
+      maintainAspectRatio: false,
+      cutout: "72%",
+      plugins: {
+        legend: { display: false },
+        tooltip: {
+          callbacks: {
+            label: context => ` ${context.label}: ${context.raw}%`
+          }
+        }
+      }
     }
   });
 
-  $("#rangeSelect").addEventListener("change", e => {
-    const range = e.target.value;
-    const dataByRange = {
-      7: { revenue: "$62,140", leads: "386", multiplier: .55 },
+  $("#rangeSelect").addEventListener("change", event => {
+    const options = {
+      7:  { revenue: "$62,140", leads: "386", multiplier: .55 },
       30: { revenue: "$248,560", leads: "1,482", multiplier: 1 },
       90: { revenue: "$712,890", leads: "4,216", multiplier: 1.8 }
     };
-    const selected = dataByRange[range];
+    const selected = options[event.target.value];
+
     $("#revenue").textContent = selected.revenue;
     $("#leadCount").textContent = selected.leads;
-    revenueChart.data.datasets[0].data = [18,25,21,34,29,42,38,52,45,59,53,68].map(n => Math.round(n * selected.multiplier));
-    revenueChart.data.datasets[1].data = [12,18,15,23,20,29,25,36,32,42,39,49].map(n => Math.round(n * selected.multiplier));
+
+    revenueChart.data.datasets[0].data =
+      [18,25,21,34,29,42,38,52,45,59,53,68].map(n => Math.round(n * selected.multiplier));
+    revenueChart.data.datasets[1].data =
+      [12,18,15,23,20,29,25,36,32,42,39,49].map(n => Math.round(n * selected.multiplier));
+
     revenueChart.update();
   });
 
   function filterProperties() {
-    const term = $("#searchInput").value.toLowerCase();
+    const term = $("#propertySearch").value.toLowerCase();
     const status = $("#statusFilter").value;
+
     document.querySelectorAll("#propertyRows tr").forEach(row => {
       const matchesText = row.textContent.toLowerCase().includes(term);
       const matchesStatus = status === "all" || row.dataset.status === status;
       row.style.display = matchesText && matchesStatus ? "" : "none";
     });
   }
-  $("#searchInput").addEventListener("input", filterProperties);
+
+  $("#propertySearch").addEventListener("input", filterProperties);
   $("#statusFilter").addEventListener("change", filterProperties);
 
   $("#themeBtn").addEventListener("click", () => {
     document.body.classList.toggle("dark");
     notify(document.body.classList.contains("dark") ? "Dark mode enabled" : "Light mode enabled");
   });
-  $("#bellBtn").addEventListener("click", () => notify("You're all caught up!"));
-  $("#addProperty").addEventListener("click", () => notify("Property form is ready to connect to your backend."));
-  $("#menuBtn").addEventListener("click", () => $("#sidebar").classList.toggle("open"));
 
-  document.querySelectorAll(".nav-item[data-page]").forEach(item => {
-    item.addEventListener("click", () => {
-      document.querySelectorAll(".nav-item[data-page]").forEach(link => link.classList.remove("active"));
-      item.classList.add("active");
-      $("#crumbPage").textContent = item.dataset.page;
-      if (item.dataset.page !== "Overview") notify(`${item.dataset.page} section selected`);
-      if (window.innerWidth <= 800) $("#sidebar").classList.remove("open");
-    });
-  });
+  $("#bellBtn").addEventListener("click", () => notify("You're all caught up!"));
+  $("#helpButton").addEventListener("click", () => notify("Help center opened."));
+  $("#addProperty").addEventListener("click", () => notify("Add Property selected — connect a form or backend to save it."));
+  $("#leadReportButton").addEventListener("click", () => notify("Lead source report selected."));
+  $("#activityButton").addEventListener("click", () => notify("Showing recent team activity."));
+  $("#menuBtn").addEventListener("click", () => $("#sidebar").classList.toggle("open"));
 </script>
 </body>
 </html>
